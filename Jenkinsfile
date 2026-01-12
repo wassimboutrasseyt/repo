@@ -23,6 +23,8 @@ pipeline {
             parallel {
                 stage('Frontend Pipeline') {
                     stages {
+                        
+
                         stage('Frontend: Install Dependencies') {
                             steps {
                                 dir('frontend') {
@@ -32,6 +34,14 @@ pipeline {
                             }
                         }
                         
+                        stage('Frontend: Test') {
+                            steps {
+                                dir('frontend') {
+                                    sh 'npm test || echo "No tests specified"'
+                                }
+                            }
+                        }
+
                         stage('Frontend: Build') {
                             steps {
                                 dir('frontend') {
@@ -63,13 +73,6 @@ pipeline {
                             }
                         }
                         
-                        stage('Frontend: Test') {
-                            steps {
-                                dir('frontend') {
-                                    sh 'npm test || echo "No tests specified"'
-                                }
-                            }
-                        }
                     }
                 }
                 
@@ -80,6 +83,14 @@ pipeline {
                                 dir('backend') {
                                     sh 'npm ci'
                                     echo 'Backend dependencies installed'
+                                }
+                            }
+                        }
+                        
+                        stage('Backend: Test') {
+                            steps {
+                                dir('backend') {
+                                    sh 'npm test || echo "No tests specified"'
                                 }
                             }
                         }
@@ -115,13 +126,6 @@ pipeline {
                             }
                         }
                         
-                        stage('Backend: Test') {
-                            steps {
-                                dir('backend') {
-                                    sh 'npm test || echo "No tests specified"'
-                                }
-                            }
-                        }
                     }
                 }
             }
