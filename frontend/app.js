@@ -1,5 +1,5 @@
-// Vite loads variables from .env automatically
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+// API requests go through Vite proxy to backend-service (ClusterIP)
+const API_BASE = "/api";
 
 const randomBtn = document.getElementById("random-btn");
 const allBtn = document.getElementById("all-btn");
