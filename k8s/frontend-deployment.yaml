@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: sanamrani/frontend:latest
+          image: wassimboutrasseyt123/frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5173

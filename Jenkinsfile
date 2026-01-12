@@ -4,7 +4,7 @@ pipeline {
     }
     
     environment {
-        DOCKER_REGISTRY = 'sanamrani'  // Change to your Docker Hub username or private registry
+        DOCKER_REGISTRY = 'wassimboutrasseyt123'  // Change to your Docker Hub username or private registry
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         FRONTEND_IMAGE = "${DOCKER_REGISTRY}/frontend:${IMAGE_TAG}"
         BACKEND_IMAGE = "${DOCKER_REGISTRY}/backend:${IMAGE_TAG}"
@@ -45,10 +45,15 @@ pipeline {
                         stage('Frontend: Push Image') {
                             steps {
                                 script {
-                                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                                        sh 'docker push ${FRONTEND_IMAGE}'
-                                        echo 'Frontend image pushed to registry'
+                                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', 
+                                                                      usernameVariable: 'DOCKER_USER', 
+                                                                      passwordVariable: 'DOCKER_PASS')]) {
+                                        sh '''
+                                            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                                            docker push ${FRONTEND_IMAGE}
+                                        '''
                                     }
+                                    echo 'Frontend image pushed to registry'
                                 }
                             }
                         }
@@ -86,10 +91,15 @@ pipeline {
                         stage('Backend: Push Image') {
                             steps {
                                 script {
-                                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                                        sh 'docker push ${BACKEND_IMAGE}'
-                                        echo 'Backend image pushed to registry'
+                                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', 
+                                                                      usernameVariable: 'DOCKER_USER', 
+                                                                      passwordVariable: 'DOCKER_PASS')]) {
+                                        sh '''
+                                            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                                            docker push ${BACKEND_IMAGE}
+                                        '''
                                     }
+                                    echo 'Backend image pushed to registry'
                                 }
                             }
                         }
