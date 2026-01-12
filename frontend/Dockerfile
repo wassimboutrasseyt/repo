@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
@@ -14,5 +14,5 @@ COPY . .
 # Expose the port
 EXPOSE 5173
 
-# Start the application
-CMD ["npm", "start"]
+# Start Vite dev server bound to all interfaces (for container use)
+CMD ["npx", "vite", "--host", "0.0.0.0"]
