@@ -131,12 +131,15 @@ pipeline {
             steps {
                 echo 'Deploying to Kubernetes cluster...'
                 script {
-                    withCredentials([file(credentialsId: 'kubeconfig-credential-id', variable: 'KUBECONFIG_FILE')]) {
+                    withCredentials([string(credentialsId: 'kubeconfig-credential-id', variable: 'KUBECONFIG_CONTENT')]) {
                         sh '''
                             # Set up kubeconfig
                             mkdir -p ~/.kube
-                            cp $KUBECONFIG_FILE ~/.kube/config
+                            echo "$KUBECONFIG_CONTENT" > ~/.kube/config
                             chmod 600 ~/.kube/config
+                            
+                            # Verify kubectl can connect
+                            kubectl cluster-info || echo "Warning: Could not connect to cluster"
                             
                             # Update image tags in k8s manifests
                             sed -i "s|image:.*backend.*|image: ${BACKEND_IMAGE}|g" k8s/backend-deployment.yaml
