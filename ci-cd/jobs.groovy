@@ -3,7 +3,7 @@ multibranchPipelineJob('project-monitoring') {
    branchSources {
       git {
          id('project-monitoring-git')
-         remote('https://github.com/San-AMRANI/project-monitoring')
+         remote('https://github.com/wassimboutrasseyt/repo')
          credentialsId('github-token')
       }
    }
